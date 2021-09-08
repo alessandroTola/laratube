@@ -10002,3 +10002,26 @@ h3 {
     border-color: #dee2e6;
   }
 }
+.btn-info {
+  color: #fff;
+}
+
+.channel-avatar {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.channel-avatar .channel-avatar-overlay {
+  display: none;
+}
+.channel-avatar:hover .channel-avatar-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+}

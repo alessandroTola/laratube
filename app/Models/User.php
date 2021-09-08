@@ -27,6 +27,14 @@ class User extends Authenticatable
         });
 
     }
+
+    /**
+     * Create the relationship between the user and Channel
+    */
+    public function channel(){
+        return $this->hasOne(Channel::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *

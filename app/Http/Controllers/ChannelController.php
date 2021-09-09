@@ -67,9 +67,17 @@ class ChannelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Channel $channel)
     {
-        //
+        if($request->hasFile('image')){
+            //Clean up the old image, in order to save the new one and not have duplicates
+            $channel->clearMediaCollection('images');
+
+            //Add a new photo to the server
+            $channel->addMediaFromRequest('image')->toMediaCollection('images');
+        }
+
+        return redirect()->back();
     }
 
     /**

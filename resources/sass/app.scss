@@ -19,20 +19,20 @@
     border: 1px solid rgba(0, 0, 0, 0.125);
 
 
-.channel-avatar-overlay {
-    display: none;
-}
-
-&:hover {
     .channel-avatar-overlay {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.4);
+        display: none;
     }
-}
+
+    &:hover {
+        .channel-avatar-overlay {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    }
 
 }

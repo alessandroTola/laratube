@@ -14,7 +14,13 @@ class Model extends BaseModel
 {
     use HasFactory;
 
+    protected $primaryKey = 'id';
+
+    //protected $keyType = 'string';
+
     public $incrementing = false;
+
+    protected $guarded = [];
 
     protected static function boot()
     {
@@ -25,6 +31,4 @@ class Model extends BaseModel
         });
 
     }
-
-    protected $guarded = [];
 }

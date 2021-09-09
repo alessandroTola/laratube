@@ -7,20 +7,21 @@
             <div class="card">
                 <div class="card-header">{{ $channel->name }}</div>
 
-                <div id="update-channel-form" class="card-body">
-                    <form action="{{ route('channels.update', $channel->id) }}" method="POST" enctype="multipart/form-data">
+                <div  class="card-body">
+                    <form id="update-channel-form" action="{{ route('channels.update', $channel->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 
                         <div class="form-group row justify-content-center">
                             <div class="channel-avatar">
                                 <div onclick="document.getElementById('image').click()" class="channel-avatar-overlay">
-                                    <img src="{{ $channel->image }}" alt="">
+
                                 </div>
+                                <img src="{{ $channel->image() }}" alt="">
                             </div>
                         </div>
 
-                        <input style="display: none" id="image" type="file" name="image">
+                        <input onchange="document.getElementById('update-channel-form').submit()" style="display: none" id="image" type="file" name="image">
 
                         <div class="form-group">
                             <label for="name" class="form-control-label">

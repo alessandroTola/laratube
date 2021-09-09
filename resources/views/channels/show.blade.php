@@ -27,13 +27,19 @@
                             </div>
                         </div>
 
-                        <div class="form-group row justify-content-center">
+                        <div class="form-group">
                             <h4 class="text-center">
                                 {{$channel->name}}
                             </h4>
                             <p class="text-center">
                                 {{$channel->description}}
                             </p>
+                            <div class="text-center">
+                                <button class="btn btn-danger">
+                                    Subscribe
+                                </button>
+                            </div>
+
                         </div>
 
                         @if ($channel->editable())

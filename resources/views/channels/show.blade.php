@@ -8,41 +8,73 @@
                 <div class="card-header">{{ $channel->name }}</div>
 
                 <div  class="card-body">
-                    <form id="update-channel-form" action="{{ route('channels.update', $channel->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PATCH')
+                    @if ($channel->editable())
+                        <form id="update-channel-form" action="{{ route('channels.update', $channel->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PATCH')
+                    @endif
+
 
                         <div class="form-group row justify-content-center">
                             <div class="channel-avatar">
-                                <div onclick="document.getElementById('image').click()" class="channel-avatar-overlay">
+                                @if($channel->editable())
+                                    <div onclick="document.getElementById('image').click()" class="channel-avatar-overlay">
 
-                                </div>
+                                    </div>
+                                @endif
+
                                 <img src="{{ $channel->image() }}" alt="">
                             </div>
                         </div>
 
-                        <input onchange="document.getElementById('update-channel-form').submit()" style="display: none" id="image" type="file" name="image">
-
-                        <div class="form-group">
-                            <label for="name" class="form-control-label">
-                                Name
-                            </label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ $channel->name }}">
+                        <div class="form-group row justify-content-center">
+                            <h4 class="text-center">
+                                {{$channel->name}}
+                            </h4>
+                            <p class="text-center">
+                                {{$channel->description}}
+                            </p>
                         </div>
 
-                        <div class="form-group">
-                            <label for="description" class="form-control-label">
-                                Description
-                            </label>
-                            <textarea rows="3" name="description" id="description" class="form-control">
-                                {{ $channel->description }}
-                            </textarea>
-                        </div>
+                        @if ($channel->editable())
+                            <input onchange="document.getElementById('update-channel-form').submit()" style="display: none" id="image" type="file" name="image">
 
-                        <button type="submit" class="btn btn-info">
-                            Update channel
-                        </button>
-                    </form>
+                            <div class="form-group">
+                                <label for="name" class="form-control-label">
+                                    Name
+                                </label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ $channel->name }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description" class="form-control-label">
+                                    Description
+                                </label>
+                                <textarea rows="3" name="description" id="description" class="form-control">
+                                    {{ $channel->description }}
+                                </textarea>
+                            </div>
+
+                            @if($errors->any())
+                            <ul class="list-group mb-5">
+                                @foreach ($errors->all() as $error)
+                                    <li class="text-danger list-group-item">
+                                        {{$error}}
+                                    </li>
+                                @endforeach
+                            </ul>
+                            @endif
+
+                            <button type="submit" class="btn btn-info">
+                                Update channel
+                            </button>
+                        @endif
+
+
+                    @if ($channel->editable())
+                        </form>
+                    @endif
+
                 </div>
             </div>
         </div>

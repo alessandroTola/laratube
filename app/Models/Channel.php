@@ -34,6 +34,16 @@ class Channel extends Model implements HasMedia
     }
 
     /**
+     * Check if the author is authorized
+    */
+    public function editable()
+    {
+        if(! auth()->check()) return false;
+
+        return $this->user_id == auth()->user()->id;
+    }
+
+    /**
      * Shrink the image to a thumbnail
      */
     public function registerMediaConversions(?Media $media = null): void

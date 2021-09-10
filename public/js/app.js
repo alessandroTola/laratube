@@ -2135,12 +2135,32 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 Vue.component('subscribe-button', {
   props: {
+    channel: {
+      type: Object,
+      required: true,
+      "default": function _default() {
+        return {};
+      }
+    },
     subscriptions: {
       type: Array,
       required: true,
       "default": function _default() {
         return [];
       }
+    }
+  },
+  computed: {
+    isSubscribed: function isSubscribed() {
+      // Check if che user is logged in or is the owner of the channel
+      if (!__auth() || this.channel.user_id === __auth().id) return false;
+      return this.subscriptions.find(function (subscription) {
+        return subscription.user_id === __auth().id;
+      });
+    },
+    isOwner: function isOwner() {
+      if (__auth() && this.channel.user_id === __auth().id) return true;
+      return false;
     }
   },
   methods: {

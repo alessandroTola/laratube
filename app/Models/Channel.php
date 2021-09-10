@@ -24,7 +24,7 @@ class Channel extends Model implements HasMedia
     }
 
     /**
-     * Retrive image from the media library
+     * Retrieve image from the media library
      */
     public function image(){
         if($this->media->first()){

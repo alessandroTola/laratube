@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subscription;
+use App\Models\Channel;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -14,9 +15,11 @@ class SubscriptionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Channel $channel)
     {
-        //
+        return $channel->subscriptions()->create([
+            'user_id' => auth()->user()->id
+        ]);
     }
 
     /**
@@ -25,8 +28,10 @@ class SubscriptionController extends Controller
      * @param  \App\Models\Subscription  $subscription
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subscription $subscription)
+    public function destroy(Channel $channel, Subscription $subscription)
     {
-        //
+        $subscription->delete();
+
+        return response()->json([]);
     }
 }

@@ -2135,8 +2135,11 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+
 
 Vue.component('subscribe-button', {
   props: {
@@ -2159,22 +2162,42 @@ Vue.component('subscribe-button', {
     isSubscribed: function isSubscribed() {
       // Check if che user is logged in or is the owner of the channel
       if (!__auth() || this.channel.user_id === __auth().id) return false;
-      return this.subscriptions.find(function (subscription) {
-        return subscription.user_id === __auth().id;
-      });
+      return !!this.subscription;
     },
     isOwner: function isOwner() {
       if (__auth() && this.channel.user_id === __auth().id) return true;
       return false;
     },
+    subscription: function subscription() {
+      if (!__auth()) return null;
+      return this.subscriptions.find(function (subscription) {
+        return subscription.user_id === __auth().id;
+      });
+    },
+    unsubscribe: function unsubscribe() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/channels/".concat(this.channel.id, "/subscriptions/").concat(this.subscription.id));
+    },
+    subscribe: function subscribe() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/channels/".concat(this.channel.id, "/subscriptions/"));
+    },
     count: function count() {
-      return numeral__WEBPACK_IMPORTED_MODULE_0___default()(this.subscriptions.length).format('0a');
+      return numeral__WEBPACK_IMPORTED_MODULE_1___default()(this.subscriptions.length).format('0a');
     }
   },
   methods: {
     toggleSubscription: function toggleSubscription() {
       if (!__auth()) {
-        alert('You must be logged in to subscribe');
+        return alert('You must be logged in to subscribe');
+      }
+
+      if (this.isOwner) {
+        return alert('You cannot subscribe to your own channel');
+      }
+
+      if (this.isSubscribed) {
+        this.unsubscribe;
+      } else {
+        this.subscribe;
       }
     }
   }

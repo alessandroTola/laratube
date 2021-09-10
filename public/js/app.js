@@ -2070,6 +2070,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"];
 
 __webpack_require__(/*! ./components/subscribe-button */ "./resources/js/components/subscribe-button.js");
+
+__webpack_require__(/*! ./components/channel-uploads */ "./resources/js/components/channel-uploads.js");
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -2127,6 +2129,28 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
+/***/ "./resources/js/components/channel-uploads.js":
+/*!****************************************************!*\
+  !*** ./resources/js/components/channel-uploads.js ***!
+  \****************************************************/
+/***/ (() => {
+
+Vue.component('channel-uploads', {
+  data: function data() {
+    return {
+      selected: false
+    };
+  },
+  methods: {
+    upload: function upload() {
+      this.selected = true;
+      var videos = this.$refs.videos.files;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/subscribe-button.js":
 /*!*****************************************************!*\
   !*** ./resources/js/components/subscribe-button.js ***!
@@ -2139,6 +2163,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 
 Vue.component('subscribe-button', {
@@ -2150,13 +2186,22 @@ Vue.component('subscribe-button', {
         return {};
       }
     },
-    subscriptions: {
+    initialSubscriptions: {
       type: Array,
       required: true,
       "default": function _default() {
         return [];
       }
     }
+  },
+  data: function data() {
+    return {
+      //isSubscribed: false,
+      //isLoading: false,
+      subscriptions: this.initialSubscriptions //subscriptionCount: 0,
+      //subscriptionCountFormatted: '',
+
+    };
   },
   computed: {
     isSubscribed: function isSubscribed() {
@@ -2174,18 +2219,14 @@ Vue.component('subscribe-button', {
         return subscription.user_id === __auth().id;
       });
     },
-    unsubscribe: function unsubscribe() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/channels/".concat(this.channel.id, "/subscriptions/").concat(this.subscription.id));
-    },
-    subscribe: function subscribe() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/channels/".concat(this.channel.id, "/subscriptions/"));
-    },
     count: function count() {
       return numeral__WEBPACK_IMPORTED_MODULE_1___default()(this.subscriptions.length).format('0a');
     }
   },
   methods: {
     toggleSubscription: function toggleSubscription() {
+      var _this = this;
+
       if (!__auth()) {
         return alert('You must be logged in to subscribe');
       }
@@ -2195,9 +2236,15 @@ Vue.component('subscribe-button', {
       }
 
       if (this.isSubscribed) {
-        this.unsubscribe;
+        axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/channels/".concat(this.channel.id, "/subscriptions/").concat(this.subscription.id)).then(function () {
+          _this.subscriptions = _this.subscriptions.filter(function (s) {
+            return s.id !== _this.subscription.id;
+          });
+        });
       } else {
-        this.subscribe;
+        axios__WEBPACK_IMPORTED_MODULE_0___default().post("/channels/".concat(this.channel.id, "/subscriptions")).then(function (response) {
+          _this.subscriptions = [].concat(_toConsumableArray(_this.subscriptions), [response.data]);
+        });
       }
     }
   }

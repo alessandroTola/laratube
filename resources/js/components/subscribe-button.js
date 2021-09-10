@@ -9,11 +9,21 @@ Vue.component('subscribe-button', {
             default: () => ({})
         },
 
-        subscriptions: {
+        initialSubscriptions: {
             type: Array,
             required: true,
             default: () => [],
         }
+    },
+
+    data: function() {
+        return {
+            //isSubscribed: false,
+            //isLoading: false,
+            subscriptions: this.initialSubscriptions,
+            //subscriptionCount: 0,
+            //subscriptionCountFormatted: '',
+        };
     },
 
     computed: {
@@ -36,17 +46,10 @@ Vue.component('subscribe-button', {
             return this.subscriptions.find(subscription => subscription.user_id === __auth().id);
         },
 
-        unsubscribe() {
-            axios.delete(`/channels/${this.channel.id}/subscriptions/${this.subscription.id}`);
-        },
-
-        subscribe() {
-            axios.post(`/channels/${this.channel.id}/subscriptions/`);
-        },
-
         count() {
             return numeral(this.subscriptions.length).format('0a');
-        }
+        },
+
     },
 
     methods: {
@@ -60,9 +63,18 @@ Vue.component('subscribe-button', {
             }
 
             if(this.isSubscribed) {
-                this.unsubscribe;
+                axios.delete(`/channels/${this.channel.id}/subscriptions/${this.subscription.id}`)
+                    .then(() => {
+                        this.subscriptions = this.subscriptions.filter(s => s.id !== this.subscription.id)
+                    })
             } else {
-                this.subscribe;
+                axios.post(`/channels/${this.channel.id}/subscriptions`)
+                    .then(response => {
+                        this.subscriptions = [
+                            ...this.subscriptions,
+                            response.data
+                        ]
+                    })
             }
         }
     }

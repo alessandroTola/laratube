@@ -52,11 +52,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //Create 10000 subscriptions for channel1 and channel2
-        \App\Models\Subscription::factory()->times(1000)->create([
+        \App\Models\Subscription::factory()->times(100)->create([
             'channel_id' => $channel1->id,
         ]);
 
-        \App\Models\Subscription::factory()->times(1000)->create([
+        \App\Models\Subscription::factory()->times(100)->create([
             'channel_id' => $channel2->id,
         ]);
 

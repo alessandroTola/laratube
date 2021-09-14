@@ -4,6 +4,7 @@ use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UploadVideoController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ Route::put('videos/{video}', [VideoController::class, 'updateViews']);
 Route::put('videos/{video}/update', [VideoController::class, 'update'])->middleware(['auth'])->name('videos.update');
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/votes/{entityId}/{type}', [VoteController::class, 'vote']);
     Route::get('/channels/{channel}/videos', [UploadVideoController::class, 'index'])->name('channel.upload');
     Route::post('/channels/{channel}/videos', [UploadVideoController::class, 'store']);
     Route::resource('channels/{channel}/subscriptions', SubscriptionController::class)->only(['store', 'destroy']);

@@ -35,6 +35,8 @@ class User extends Authenticatable
         return $this->hasOne(Channel::class);
     }
 
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -64,4 +66,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * Query the vote, if exists for the current user, update it, else create a new one
+    */
+    public function toggleVote($entity, $type) {
+        $vote = $entity->votes->where('user_id', $this->id)->first();
+
+        if ($vote) {
+            $vote->update([
+                'type' => $type
+            ]);
+
+            return $vote->refresh();
+        } else {
+            return $entity->votes()->create([
+                'type' => $type,
+                'user_id' => $this->id
+            ]);
+        }
+    }
 }

@@ -29,7 +29,7 @@
                                 </h4>
                                 {{ $video->views }} {{ Str::plural('view', $video->views) }}
                             </div>
-
+                            <votes :dafault_votes='{{ $video->votes }}' entity_id="{{ $video->id }}" entity_owner="{{ $video->channel->user_id }}"></votes>
 
                         </div>
 

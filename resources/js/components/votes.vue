@@ -1,6 +1,6 @@
 <template>
     <div>
-        <svg v-on:click="vote('up')" class="thumbs-up" :class="{ 'thumbs-up-active': upvoted }" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        <svg @click="vote('up')" class="thumbs-up" :class="{ 'thumbs-up-active': upvoted }" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         viewBox="0 0 478.2 478.2" style="enable-background:new 0 0 478.2 478.2;" xml:space="preserve">
             <g>
                 <path d="M457.575,325.1c9.8-12.5,14.5-25.9,13.9-39.7c-0.6-15.2-7.4-27.1-13-34.4c6.5-16.2,9-41.7-12.7-61.5
@@ -74,12 +74,11 @@
             entity_id: {
                 required: true,
                 default: ''
-            },
+            }
         },
-
         data() {
             return {
-                votes: this.default_votes,
+                votes: this.default_votes
             }
         },
         computed: {
@@ -115,8 +114,6 @@
                 }
                 if (type === 'up' && this.upvoted) return
                 if (type === 'down' && this.downvoted) return
-
-
                 axios.post(`/votes/${this.entity_id}/${type}`)
                     .then(({ data }) => {
                         if (this.upvoted || this.downvoted) {

@@ -35,6 +35,13 @@ class User extends Authenticatable
         return $this->hasOne(Channel::class);
     }
 
+    /**
+     * Create the relationship between the user and Comments
+    */
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
 
 
     /**

@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use Database\Factories\ChannelFactory;
+use Database\Factories\CommentFactory;
 use Database\Factories\UserFactory;
 use Database\Factories\SubscriptionFactory;
+use Database\Factories\VideoFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -59,6 +62,23 @@ class DatabaseSeeder extends Seeder
         \App\Models\Subscription::factory()->times(100)->create([
             'channel_id' => $channel2->id,
         ]);
+
+        $video = VideoFactory::new()->create([
+            'channel_id' => $channel1->id,
+
+        ]);
+
+        \App\Models\Comment::factory()->times(50)->create([
+            'video_id' => $video->id,
+        ]);
+
+        $comment = Comment::first();
+
+        \App\Models\Comment::factory()->times(50)->create([
+            'video_id' => $video->id,
+            'comment_id' => $comment->id,
+        ]);
+
 
     }
 }
